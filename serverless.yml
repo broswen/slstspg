@@ -1,0 +1,22 @@
+service: slstspg
+
+frameworkVersion: "2"
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  memorySize: 128
+  timeout: 3
+  lambdaHashingVersion: "20201221"
+
+functions:
+  hello:
+    handler: src/lambdas/handler.hello
+    events:
+      - http:
+          path: /
+          method: get
