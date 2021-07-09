@@ -1,6 +1,8 @@
 "use strict";
 
-module.exports.hello = async (event) => {
+import { APIGatewayProxyEvent } from 'aws-lambda'
+
+module.exports.hello = async (event: APIGatewayProxyEvent) => {
   return {
     statusCode: 200,
     body: JSON.stringify(
