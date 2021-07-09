@@ -8,10 +8,18 @@ plugins:
 
 provider:
   name: aws
+  region: us-east-1
+  stage: dev
+
+  lambdaHashingVersion: "20201221"
   runtime: nodejs12.x
   memorySize: 128
   timeout: 3
-  lambdaHashingVersion: "20201221"
+
+  # iamRoleStatements:
+  #   - permission to call Kms for database creds?
+  # environment:
+  #   db: get db url
 
 functions:
   hello:
@@ -20,9 +28,12 @@ functions:
       - http:
           path: /
           method: get
+    #add vpc details
 
 resources:
   Resources:
+    #database security-group
+    #lambda security-group
     postgres:
       Type: AWS::RDS::DBInstance
       Properties:
