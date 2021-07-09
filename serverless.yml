@@ -21,41 +21,41 @@ functions:
           path: /
           method: get
 
-resources
+resources:
   Resources:
     postgres:
       Type: AWS::RDS::DBInstance
       Properties:
-        AllocatedStorage: 
-        DBInstanceClass: 
+        AllocatedStorage:
+        DBInstanceClass:
         AllowMajorVersionUpgrade: true|false
         AutoMinorVersionUpgrade: true|false
-        AvailabilityZone: 
-        BackupRetentionPeriod: 
-        CharacterSetName: 
-        DBInstanceIdentifier: 
-        DBName: 
-        DBParameterGroupName: 
-        DBSecurityGroups: 
+        AvailabilityZone:
+        BackupRetentionPeriod:
+        CharacterSetName:
+        DBInstanceIdentifier:
+        DBName:
+        DBParameterGroupName:
+        DBSecurityGroups:
           - db-sg-group
-        DBSnapshotIdentifier: 
-        DBSubnetGroupName: 
+        DBSnapshotIdentifier:
+        DBSubnetGroupName:
         Engine: mysql|oracle
-        EngineVersion: 
-        Iops: 
-        KmsKeyId: 
-        LicenseModel: 
-        MasterUsername: 
-        MasterUserPassword: 
+        EngineVersion:
+        Iops:
+        KmsKeyId:
+        LicenseModel:
+        MasterUsername:
+        MasterUserPassword:
         MultiAZ: true|false
-        OptionGroupName: 
-        Port: 
-        PreferredBackupWindow: 
-        PreferredMaintenanceWindow: 
+        OptionGroupName:
+        Port:
+        PreferredBackupWindow:
+        PreferredMaintenanceWindow:
         PubliclyAccessible: true|false
-        SourceDBInstanceIdentifier: 
+        SourceDBInstanceIdentifier:
         StorageEncrypted: true|false
-        StorageType: 
+        StorageType:
         VPCSecurityGroups:
           - vpc-sg-id
         Tags:
