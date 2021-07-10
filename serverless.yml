@@ -9,66 +9,41 @@ plugins:
 provider:
   name: aws
   region: us-east-1
-  stage: dev
+  stage: ${opt:stage, 'dev'}
 
   lambdaHashingVersion: "20201221"
   runtime: nodejs12.x
   memorySize: 128
-  timeout: 3
+  timeout: 5
 
-  # iamRoleStatements:
-  #   - permission to call Kms for database creds?
-  # environment:
-  #   db: get db url
+  iamRoleStatements:
+    - Effect: Allow
+      Action: secretsmanager:GetSecretValue
+      Resource: ${file(serverless.${self:provider.stage}.yml):postgresSecretArn}
+  environment:
+    DBSECRET: ${file(serverless.${self:provider.stage}.yml):postgresSecretArn}
 
 functions:
-  hello:
-    handler: src/lambdas/handler.hello
+  GetTodayDate:
+    handler: src/lambdas/GetTodayDate.handler
     events:
       - http:
-          path: /
+          path: /today
           method: get
-    #add vpc details
+    vpc:
+      subnetIds: ${file(./serverless.${self:provider.stage}.yml):subnets}
+      securityGroupIds:
+        - !Ref lambdaSecurityGroup
 
+  GetPreviousMonthEnd:
+    handler: src/lambdas/GetPreviousMonthEnd.handler
+    events:
+      - http:
+          path: /previousmonth
+          method: get
+    vpc:
+      subnetIds: ${file(./serverless.${self:provider.stage}.yml):subnets}
+      securityGroupIds:
+        - !Ref lambdaSecurityGroup
 resources:
-  Resources:
-    #database security-group
-    #lambda security-group
-    postgres:
-      Type: AWS::RDS::DBInstance
-      Properties:
-        AllocatedStorage:
-        DBInstanceClass:
-        AllowMajorVersionUpgrade: true|false
-        AutoMinorVersionUpgrade: true|false
-        AvailabilityZone:
-        BackupRetentionPeriod:
-        CharacterSetName:
-        DBInstanceIdentifier:
-        DBName:
-        DBParameterGroupName:
-        DBSecurityGroups:
-          - db-sg-group
-        DBSnapshotIdentifier:
-        DBSubnetGroupName:
-        Engine: mysql|oracle
-        EngineVersion:
-        Iops:
-        KmsKeyId:
-        LicenseModel:
-        MasterUsername:
-        MasterUserPassword:
-        MultiAZ: true|false
-        OptionGroupName:
-        Port:
-        PreferredBackupWindow:
-        PreferredMaintenanceWindow:
-        PubliclyAccessible: true|false
-        SourceDBInstanceIdentifier:
-        StorageEncrypted: true|false
-        StorageType:
-        VPCSecurityGroups:
-          - vpc-sg-id
-        Tags:
-          - Key: keyname
-            Value: value
+  - ${file(./cfn-resources/rds-resources.yml)}
