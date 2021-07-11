@@ -19,6 +19,19 @@ async function getRDSSecret (secretArn: string): Promise<RDSSecret> {
     logger.info('secret in cache')
     return secret
   }
+    
+  if (process.env.STAGE === 'local') {
+    logger.info('returning local secret')
+    secret = {
+      username: 'postgres',
+      password: 'password',
+      engine: 'postgres',
+      host: 'localhost',
+      port: 5432,
+      dbInstanceIdentifier: 'localhost'
+    }
+    return secret
+  }
 
   const getSecretInput: GetSecretValueCommandInput = {
     SecretId: process.env.DBSECRET

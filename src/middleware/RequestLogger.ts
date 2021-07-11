@@ -17,7 +17,8 @@ const requestLoggerMiddleware = (options?) => {
         logger.info({
             method: request.event.httpMethod,
             path: request.event.path,
-            sourceIp: request.event.requestContext.identity.sourceIp
+            sourceIp: request.event.requestContext.identity.sourceIp,
+            stage: process.env.STAGE
         }
     }
 

@@ -22,6 +22,7 @@ provider:
       Resource: ${file(serverless.${self:provider.stage}.yml):postgresSecretArn}
   environment:
     DBSECRET: ${file(serverless.${self:provider.stage}.yml):postgresSecretArn}
+    STAGE: ${self:provider.stage}
 
 functions:
   GetTodayDate:
@@ -47,3 +48,4 @@ functions:
         - !Ref lambdaSecurityGroup
 resources:
   - ${file(./cfn-resources/rds-resources.yml)}
+  - ${file(./cfn-resources/vpc-resources.yml)}
