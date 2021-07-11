@@ -14,13 +14,14 @@ const createError = require('http-errors')
 
 let sequelize: Sequelize
 
-async function getTodayDate (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
+async function getTodayDate(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
   const secret: RDSSecret = await getRDSSecret(process.env.DBSECRET!)
   try {
     sequelize = new Sequelize(`postgres://${secret.username}:${secret.password}@${secret.host}:${secret.port}/dates`)
+    await sequelize.authenticate();
   } catch (error) {
     logger.error(error)
-    throw createError(404)
+    throw createError(500)
   }
   const rundate = RunDate(sequelize)
 

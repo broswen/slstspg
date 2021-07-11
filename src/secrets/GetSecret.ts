@@ -14,12 +14,12 @@ interface RDSSecret {
 
 let secret: RDSSecret
 
-async function getRDSSecret (secretArn: string): Promise<RDSSecret> {
+async function getRDSSecret(secretArn: string): Promise<RDSSecret> {
   if (secret != null) {
     logger.info('secret in cache')
     return secret
   }
-    
+
   if (process.env.STAGE === 'local') {
     logger.info('returning local secret')
     secret = {

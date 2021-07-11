@@ -8,6 +8,7 @@
 - [x] setup sequelize and postgres connection
 - [x] setup docker postgres for testing
 - [x] setup stage variable files
+- [ ] centralize sequelize connection
 - [ ] cache Sequelize connection
 - [ ] cache secretsmanager
 

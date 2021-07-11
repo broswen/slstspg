@@ -12,9 +12,17 @@ const jsonBodyParser = require('@middy/http-json-body-parser')
 const httpErrorHandler = require('@middy/http-error-handler')
 const createError = require('http-errors')
 
-async function getPreviousMonthEnd (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
+let sequelize: Sequelize
+
+async function getPreviousMonthEnd(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
   const secret: RDSSecret = await getRDSSecret(process.env.DBSECRET!)
-  const sequelize = new Sequelize(`postgres://${secret.username}:${secret.password}@${secret.host}:${secret.port}/dates`)
+  try {
+    sequelize = new Sequelize(`postgres://${secret.username}:${secret.password}@${secret.host}:${secret.port}/dates`)
+    await sequelize.authenticate();
+  } catch (error) {
+    logger.error(error)
+    throw createError(500)
+  }
   const rundate = RunDate(sequelize)
 
   let previousMonthEnd: Model<RunDateAttributes, RunDateCreationAttributes> | null

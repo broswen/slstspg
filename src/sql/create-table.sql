@@ -2,7 +2,7 @@ CREATE TABLE public.dates
 (
     dateType text NOT NULL,
     dateValue date NOT NULL,
-    PRIMARY KEY (date_type)
+    PRIMARY KEY (dateType)
 );
 
 ALTER TABLE public.dates

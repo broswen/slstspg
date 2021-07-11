@@ -20,17 +20,19 @@ const RunDate = function (sequelize: Sequelize): ModelDefined<RunDateAttributes,
     {
       dateType: {
         type: DataTypes.TEXT,
-        primaryKey: true
+        primaryKey: true,
+        field: 'datetype'
       },
       dateValue: {
         type: DataTypes.DATEONLY,
-        allowNull: false
+        allowNull: false,
+        field: 'datevalue'
       }
     }, {
-      createdAt: false,
-      updatedAt: false,
-      tableName: 'dates'
-    })
+    createdAt: false,
+    updatedAt: false,
+    tableName: 'dates'
+  })
 }
 
 export { RunDateModel, RunDate, RunDateAttributes, RunDateCreationAttributes, TODAY, PREVIOUSMONTHEND }
