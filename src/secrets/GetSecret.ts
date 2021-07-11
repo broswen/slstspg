@@ -14,17 +14,17 @@ interface RDSSecret {
 
 let secret: RDSSecret
 
-async function getRDSSecret(secretArn: string): Promise<RDSSecret> {
+async function getRDSSecret (secretArn: string): Promise<RDSSecret> {
   if (secret != null) {
-      logger.info('secret in cache')
-      return secret
+    logger.info('secret in cache')
+    return secret
   }
 
   const getSecretInput: GetSecretValueCommandInput = {
     SecretId: process.env.DBSECRET
   }
   logger.info(`get secret ${secretArn}`)
-  let getSecretResponse: GetSecretValueCommandOutput = await smClient.send(new GetSecretValueCommand(getSecretInput))
+  const getSecretResponse: GetSecretValueCommandOutput = await smClient.send(new GetSecretValueCommand(getSecretInput))
   if (getSecretResponse.SecretString == null) {
     throw new Error(`SecretString is null for ${secretArn}`)
   }
@@ -32,11 +32,10 @@ async function getRDSSecret(secretArn: string): Promise<RDSSecret> {
   try {
     secret = JSON.parse(getSecretResponse.SecretString!)
   } catch (error) {
-    throw new Error(`unable to parse SecretString for ${secretArn}`)  
+    throw new Error(`unable to parse SecretString for ${secretArn}`)
   }
 
-
-  return secret;
+  return secret
 }
 
-export { getRDSSecret, RDSSecret}
+export { getRDSSecret, RDSSecret }
