@@ -12,13 +12,8 @@ const jsonBodyParser = require('@middy/http-json-body-parser')
 const httpErrorHandler = require('@middy/http-error-handler')
 const createError = require('http-errors')
 
-
-
 async function getTodayDate (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
-
-  logger.info(`get secret ${process.env.DBSECRET}`)
   const secret: RDSSecret = await getRDSSecret(process.env.DBSECRET!)
-  logger.info(secret)
   const sequelize = new Sequelize(`postgres://${secret.username}:${secret.password}@${secret.host}:${secret.port}/dates`)
   const rundate = RunDate(sequelize)
 

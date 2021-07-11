@@ -12,17 +12,23 @@ interface RDSSecret {
   dbInstanceIdentifier: string
 }
 
+let secret: RDSSecret
+
 async function getRDSSecret(secretArn: string): Promise<RDSSecret> {
+  if (secret != null) {
+      logger.info('secret in cache')
+      return secret
+  }
+
   const getSecretInput: GetSecretValueCommandInput = {
     SecretId: process.env.DBSECRET
   }
+  logger.info(`get secret ${secretArn}`)
   let getSecretResponse: GetSecretValueCommandOutput = await smClient.send(new GetSecretValueCommand(getSecretInput))
-
   if (getSecretResponse.SecretString == null) {
     throw new Error(`SecretString is null for ${secretArn}`)
   }
 
-  let secret: RDSSecret
   try {
     secret = JSON.parse(getSecretResponse.SecretString!)
   } catch (error) {

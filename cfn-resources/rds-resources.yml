@@ -13,7 +13,7 @@ Resources:
   lambdaSecurityGroupEgress:
     Type: AWS::EC2::SecurityGroupEgress
     Properties:
-      GroupId: !Ref lambdaSecurityGroup
+      GroupId: !GetAtt lambdaSecurityGroup.GroupId
       DestinationSecurityGroupId: !Ref postgresSecurityGroup
       IpProtocol: '-1'
 
@@ -26,6 +26,28 @@ Resources:
       SecurityGroupIngress:
         - SourceSecurityGroupId: !Ref lambdaSecurityGroup
           IpProtocol: '-1'
+
+  secretsManagerEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      ServiceName: com.amazonaws.us-east-1.secretsmanager
+      VpcId: ${file(serverless.${self:provider.stage}.yml):vpc}
+      VpcEndpointType: Interface
+      SubnetIds: ${file(serverless.${self:provider.stage}.yml):subnets}
+      PrivateDnsEnabled: true
+      SecurityGroupIds:
+        - !GetAtt vpcEndpointSecurityGroup.GroupId
+
+  vpcEndpointSecurityGroup:
+      Type: 'AWS::EC2::SecurityGroup'
+      Properties:
+        VpcId: ${file(serverless.${self:provider.stage}.yml):vpc}
+        GroupDescription: 'Security group for VPC Endpoint'
+        SecurityGroupIngress:
+          - IpProtocol: tcp
+            FromPort: 443
+            ToPort: 443
+            SourceSecurityGroupId: !GetAtt lambdaSecurityGroup.GroupId
 
   postgresSubnetGroup:
     Type: AWS::RDS::DBSubnetGroup
