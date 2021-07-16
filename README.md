@@ -10,7 +10,7 @@
 - [x] setup stage variable files
 - [ ] centralize sequelize connection
 - [ ] cache Sequelize connection
-- [ ] cache secretsmanager
+- [x] cache secretsmanager
 
 ### Testing
 
